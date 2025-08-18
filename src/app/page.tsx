@@ -1,103 +1,191 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+export default function Page() {
+  const [open, setOpen] = useState(false);
+
+  // Auto-open doors after 1.5s
+  useEffect(() => {
+    const timer = setTimeout(() => setOpen(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className={`double-door ${open ? "open" : ""}`}>
+      {/* Content behind the doors */}
+      <main className="reveal-screen flex flex-col">
+        {/* Hero */}
+        <section className="relative h-screen flex items-center justify-center bg-[#7b1e20]">
+          <div className="absolute inset-0"></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+          <div className="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6">
+            {/* Left Text */}
+            <div className="max-w-xl text-left md:pr-10">
+              <h1 className="text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6">
+                PLAN YOUR <br /> MOVE ABROAD
+              </h1>
+              <p className="text-white/90 text-lg mb-8">
+                Get a personalized travel checklist with everything you need to
+                prepare — from documents to daily essentials.
+              </p>
+              <Link href="/generate-checklist">
+                <Button
+                  size="lg"
+                  className="bg-white text-black text-lg px-8 py-4 rounded-full shadow-lg hover:bg-gray-200"
+                >
+                  Get My Checklist
+                </Button>
+              </Link>
+
+              {/* Benefits row */}
+              <div className="grid grid-cols-3 gap-4 mt-10 text-white/90 text-sm">
+                <div className="text-center">
+                  <p className="font-semibold">Personalized</p>
+                  <span className="block text-xs">
+                    Tailored to your country & visa
+                  </span>
+                </div>
+                <div className="text-center">
+                  <p className="font-semibold">Organized</p>
+                  <span className="block text-xs">
+                    All essentials in categories
+                  </span>
+                </div>
+                <div className="text-center">
+                  <p className="font-semibold">Peace of Mind</p>
+                  <span className="block text-xs">
+                    Never forget what matters
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Checklist Preview */}
+            <div className="relative mt-10 md:mt-0">
+              <img
+                src="/checklist-preview.png"
+                alt="Checklist preview"
+                className="w-[300px] md:w-[380px] rounded-2xl shadow-2xl"
+              />
+              <div className="absolute -bottom-6 right-0 bg-white rounded-xl p-4 shadow-xl">
+                <h3 className="font-bold text-base">Essential Travel Checklist</h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  Includes documents, packing, health, and more.
+                </p>
+                <span className="font-semibold text-lg">Free</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Categories styled like product cards */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              Everything You Need, Organized
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {[
+                {
+                  title: "Documents & Admin",
+                  desc: "Visas, insurance, and contracts.",
+                },
+                {
+                  title: "Finances",
+                  desc: "Banking, cards, and budgeting tools.",
+                },
+                {
+                  title: "Health & Insurance",
+                  desc: "Coverage, medicines, and emergency info.",
+                },
+                {
+                  title: "Packing Essentials",
+                  desc: "Clothing, electronics, and adapters.",
+                },
+                {
+                  title: "Local Must-Haves",
+                  desc: "Registrations, SIM cards, transport passes.",
+                },
+                {
+                  title: "First Week Setup",
+                  desc: "Groceries, orientation, and settling in.",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition cursor-pointer"
+                >
+                  <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+                  <p className="text-gray-500 text-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="py-20 bg-[#f5f5f5] text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Ready to Plan Your Journey?
+          </h2>
+          <Button size="lg" className="px-8 py-4 text-lg">
+            Start Checklist
+          </Button>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Doors */}
+      <div className="door left-door" />
+      <div className="door right-door" />
+
+      <style jsx>{`
+        .double-door {
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          perspective: 2000px;
+          overflow: hidden;
+          background: black;
+        }
+        .reveal-screen {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+          overflow-y: auto;
+        }
+        .door {
+          position: absolute;
+          width: 50%;
+          height: 100%;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          transform-style: preserve-3d;
+          transition: transform 1.5s ease;
+          z-index: 1;
+        }
+        .left-door {
+          left: 0;
+          background-image: url("left.png");
+          transform-origin: left center;
+        }
+        .right-door {
+          right: 0;
+          background-image: url("right.png");
+          transform-origin: right center;
+        }
+        .double-door.open .left-door {
+          transform: rotateY(120deg);
+        }
+        .double-door.open .right-door {
+          transform: rotateY(-120deg);
+        }
+      `}</style>
     </div>
   );
 }
