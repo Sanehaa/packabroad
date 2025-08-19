@@ -8,7 +8,16 @@ const config: Config = {
     "./src/app/**/*.{ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        oxford: "#00213F",
+        aero: "#5EBDDC",
+        caramel: "#D48346",
+        tawny: "#CE5E22",
+        "process-cyan": "#41ADD6",
+        lightblue: "#AECECE",
+      },
+    },
   },
   plugins: [],
 }
