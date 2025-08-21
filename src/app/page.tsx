@@ -4,71 +4,113 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Lottie from "lottie-react";
-import animationData from "../../public/New York to Paris (2).json"
+import animationData from "../../public/New York to Paris (2).json";
+import cloudsAnimation from "../../public/clouds.json";
+
+import { ArrowRight, Palette, FolderKanban, CheckCircle } from "lucide-react";
 
 export default function Page() {
   const [open, setOpen] = useState(false);
+  const [showClouds, setShowClouds] = useState(false);
+  const [showBackground, setShowBackground] = useState(false);
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setOpen(true), 1500);
-    return () => clearTimeout(timer);
+    const doorTimer = setTimeout(() => setOpen(true), 1500);
+
+    const cloudsTimer = setTimeout(() => setShowClouds(true), 2500);
+
+    const backgroundTimer = setTimeout(() => {
+      setShowClouds(false);
+      setShowBackground(true);
+      setShowContent(true);
+    }, 6000);
+
+    return () => {
+      clearTimeout(doorTimer);
+      clearTimeout(cloudsTimer);
+      clearTimeout(backgroundTimer);
+    };
   }, []);
+
+  const features = [
+    {
+      title: "Personalized",
+      desc: "Tailored to your country & visa",
+      icon: <Palette className="w-8 h-8 text-[#5EBDDC]" />,
+    },
+    {
+      title: "Organized",
+      desc: "All essentials in categories",
+      icon: <FolderKanban className="w-8 h-8 text-[#D48346]" />,
+    },
+    {
+      title: "Peace of Mind",
+      desc: "Never forget what matters",
+      icon: <CheckCircle className="w-8 h-8 text-[#AECECE]" />,
+    },
+  ];
 
   return (
     <div className={`double-door ${open ? "open" : ""}`}>
-      <main className="reveal-screen flex flex-col">
+      <main className="reveal-screen flex flex-col ">
         <section className="relative h-screen flex items-center justify-center bg-[#00213F] overflow-hidden">
-  <div className="absolute inset-0 z-0 bg-[#00213F]">
-  <Lottie 
-    animationData={animationData} 
-    loop={true} 
-    className="w-full h-full object-cover" 
-  />
-</div>
+          {showClouds && (
+            <div className="absolute inset-0 z-20 bg-[#00213F] w-full h-full">
+              <Lottie
+                animationData={cloudsAnimation}
+                loop={false}
+                autoplay={true}
+                rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
+                style={{ width: "100vw", height: "100vh", position: "absolute", top: 0, left: 0 }}
+              />
+            </div>
+          )}
 
-          <div className="relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6">
+          {showBackground && (
+            <div className="absolute inset-0 z-0 bg-[#00213F]">
+              <Lottie
+                animationData={animationData}
+                loop={true}
+                autoplay={true}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+
+          <div
+            className={`relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 transition-opacity duration-1000 ${
+              showContent ? "opacity-100" : "opacity-0"
+            }`}
+          >
             <div className="max-w-xl text-left md:pr-10">
               <h1 className="text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6">
                 PLAN YOUR <br />
-                <span className="whitespace-nowrap">MOVE ABROAD ✈️</span>
+                <span className="whitespace-nowrap">MOVE ABROAD 🧳</span>
               </h1>
 
               <p className="text-white/90 text-lg mb-8">
                 Get a personalized travel checklist with everything you need to
                 prepare from documents to daily essentials.
               </p>
+
               <Link href="/generate-checklist">
                 <Button
                   size="lg"
-                  className="bg-white text-black text-lg px-8 py-4 rounded-full shadow-lg hover:bg-gray-200"
+                  className="bg-white text-black text-lg px-8 py-4 rounded-[15px] shadow-lg hover:bg-gray-200 flex items-center gap-2"
                 >
                   Get My Checklist
+                  <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
 
               <div className="grid grid-cols-3 gap-6 mt-10 text-white/90 text-sm">
-                {[
-                  {
-                    title: "Personalized",
-                    desc: "Tailored to your country & visa",
-                    icon: "🎨",
-                  },
-                  {
-                    title: "Organized",
-                    desc: "All essentials in categories",
-                    icon: "🗂️",
-                  },
-                  {
-                    title: "Peace of Mind",
-                    desc: "Never forget what matters",
-                    icon: "✅",
-                  },
-                ].map((item, i) => (
+                {features.map((item, i) => (
                   <div
                     key={i}
                     className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg hover:bg-white/20 transition"
                   >
-                    <div className="text-2xl mb-3">{item.icon}</div>
+                    <div className="mb-3">{item.icon}</div>
                     <p className="font-semibold">{item.title}</p>
                     <span className="block text-xs text-white/80 text-center mt-1">
                       {item.desc}
@@ -81,7 +123,6 @@ export default function Page() {
         </section>
       </main>
 
-      {/* Doors */}
       <div className="door left-door" />
       <div className="door right-door" />
 
